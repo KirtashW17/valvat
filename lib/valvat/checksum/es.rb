@@ -4,9 +4,9 @@ class Valvat
   module Checksum
     class ES < Base
       NATURAL_PERSON_CHARS       = %w[T R W A G M Y F P D X B N J Z S Q V H L C K E].freeze
-      NATURAL_PERSON_EXP         = /\A(\d{8}[ABCDEFGHJKLMNPQRSTVWXYZ]|[KLMXYZ]\d{7}[ABCDEFGHJKLMNPQRSTVWXYZ])\Z/.freeze
+      NATURAL_PERSON_EXP         = /\A([XYZ]|\d{8}[ABCDEFGHJKLMNPQRSTVWXYZ]\Z|[KLMXYZ]\d{7}[ABCDEFGHJKLMNPQRSTVWXYZ]\Z)/.freeze
       LEGAL_PERSON_CHARS = [false] + %w[A B C D E F G H I J]
-      LEGAL_PERSON_EXP   = /\A[NPQRSW]\d{7}[ABCDEFGHIJ]\Z/.freeze
+      LP_LETTER_CHECK_DIGIT_EXP   = /\A([ABCDEFGHJNPQRSUVW]00|[PQRSW]\d{7}[ABCDEFGHIJ1-9]\Z|[CDFGJNUV]\d{7}[ABCDEFGHIJ]\Z)/.freeze
       NIE_DIGIT_BY_LETTER = %w[X Y Z].freeze
 
       def check_digit
@@ -46,7 +46,7 @@ class Valvat
       end
 
       def legal_foreign_person?
-        !!(vat.to_s_wo_country =~ LEGAL_PERSON_EXP)
+        !!(vat.to_s_wo_country =~ LP_LETTER_CHECK_DIGIT_EXP)
       end
     end
   end
