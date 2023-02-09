@@ -24,13 +24,12 @@ describe Valvat::Checksum::ES do
   end
 
   describe 'some CIF categories (NPQRSW) require control-digit to be a letter' do
-    invalid_vat = 'ESP65474207'
-    valid_vat = 'ESP6547420G'
+    invalid_vat = "ESP65474207"
+    valid_vat = "ESP6547420G"
 
     it "returns false on invalid VAT #{invalid_vat}" do
       expect(Valvat::Checksum.validate(invalid_vat)).to be(false)
     end
-
     it "returns true on valid VAT #{valid_vat}" do
       expect(Valvat::Checksum.validate(valid_vat)).to be(true)
     end
@@ -45,8 +44,7 @@ describe Valvat::Checksum::ES do
   end
 
   describe 'applies special rules to validation' do
-    describe 'special NIF categories (KLM) require CD to be a letter and first two digits '\
-             'to be between 01 and 56 (inclusive)' do
+    describe 'special NIF categories (KLM) require CD to be a letter and first two digits to be between 01 and 56 (inclusive)' do
       %w[ESK8201230M ESK0001230B].each do |invalid_vat|
         it "returns false on invalid VAT #{invalid_vat}" do
           expect(Valvat::Checksum.validate(invalid_vat)).to be(false)
@@ -54,7 +52,7 @@ describe Valvat::Checksum::ES do
       end
     end
 
-    describe 'arbitrarily invalid VATs' do
+    describe 'Arbitrarily invalid VATs' do
       %w[ESX0000000T ES00000001R ES00000000T ES99999999R].each do |invalid_vat|
         it "returns false on invalid VAT #{invalid_vat}" do
           expect(Valvat::Checksum.validate(invalid_vat)).to be(false)
@@ -62,4 +60,12 @@ describe Valvat::Checksum::ES do
       end
     end
   end
+
+  describe 'if starts with [KLMXYZ\\d], is always a natural person' do
+    invalid_vat = 'ESX65474207'
+    it "returns false on invalid VAT #{invalid_vat}" do
+      expect(Valvat::Checksum.validate(invalid_vat)).to be(false)
+    end
+  end
+
 end
